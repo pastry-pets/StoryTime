@@ -6,33 +6,41 @@ const bcrypt = require('bcrypt')
 const router = express.Router();
 
 // User registration
-router.post('/register', async (req, res) => {
+// is there a graceful way to break a then chain? All these guards seem kind of wasteful.
+router.post('/register', (req, res) => {
   const { username, password } = req.body;
 
-  try {
-    // Check if the username already exists
-    const existingUser = await User.findOne({ where: { username } });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Username already exists.' });
-    }
-
-    if (!username || !password) {
-      return res.status(400).json({ message: 'must input a username and password' });
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new user
-    const new_user = await User.create({ username, password: hashedPassword });
-    const user_id = new_user.id;
-    const user_name = new_user.username;
-
-    return res.status(201).json({ message: 'Registration successful.', new_user, user_id, user_name });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal server error.' });
+  if (!username || !password) {
+    res.status(400).json({ message: 'must input a username and password' });
+    return;
   }
+
+  // Check if the username already exists
+  User.findOne({ where: { username } })
+    .then((existingUser) => {
+      if (existingUser) {
+        res.status(400).json({ message: 'Username already exists.' });
+        return;
+      }
+
+      // Hash the password
+      return bcrypt.hash(password, 10);
+    })
+    .then((hashedPassword) => {
+      if (hashedPassword) {
+        return User.create({ username, password: hashedPassword});
+      }
+    })
+    .then((new_user) => {
+      if (new_user) {
+        const { id: user_id, username: user_name } = new_user;
+        return res.status(201).json({ message: 'Registration successful.', new_user, user_id, user_name });
+      }
+    })
+    .catch((error) => {
+      console.error('Failed to create new user:', error);
+      return res.status(500).json({ message: 'Internal server error.' });
+    })
 });
 
 // User login

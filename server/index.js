@@ -29,22 +29,25 @@ app.use(
 
 // Passport.js local strategy for user login
 passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const user = await User.findOne({ where: { username } });
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
+  new LocalStrategy((username, password, done) => {
+    return User.findOne({ where: { username } })
+      .then((user) => {
+        if (!user) {
+          return done(null, false, { message: 'Incorrect username.' });
+        }
 
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      if (!passwordMatch) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
+        return bcrypt.compare(password, user.password)
+          .then((passwordMatch) => {
+            if (!passwordMatch) {
+              return done(null, false, { message: 'Incorrect password.' });
+            }
 
-      return done(null, user);
-    } catch (error) {
-      return done(error);
-    }
+            return done(null, user);
+          })
+      })
+      .catch((error) => {
+        return done(error);
+      });
   })
 );
 
@@ -54,13 +57,15 @@ passport.serializeUser((user, done) => {
 });
 
 // Deserialize user from session storage
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findByPk(id);
-    done(null, user);
-  } catch (error) {
-    done(error);
-  }
+passport.deserializeUser((id, done) => {
+  User.findByPk(id)
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((error) => {
+      console.error('Error with deserialization:', error);
+      done(error);
+    });
 });
 
 // Require and use routes
