@@ -6,8 +6,7 @@ import Login from './Login.jsx'
 import User from './User.jsx';
 import Post from './Post.jsx';
 import Register from './Register.jsx';
-
-
+import Bookshelf from './Bookshelf.jsx';
 
 
 function App () {
@@ -25,6 +24,7 @@ function App () {
   //   }
   // }, []);
 
+  // adding a route to the bookshelf component
   return (
     <AuthProvider>
       <div className='wrapper'>
@@ -35,6 +35,7 @@ function App () {
             <Route path="/home" element={<Homepage/>} />
             <Route exact path="/user" element={<User/>} />
             <Route path="/text/id" element={<Post/>} />
+            <Route path="/user/bookshelf" element={<Bookshelf />} />
           </Routes>
         </Router>
       </div>
