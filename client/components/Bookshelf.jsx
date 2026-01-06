@@ -134,6 +134,21 @@ const Bookshelf = () => {
             </div>
             <h1 className='badges-header' >Badges</h1>
             </div>
+                  <div>
+        {
+          Object.entries(userBadgeObj).map((category, i) => {
+            if(category[1] >= 10) {
+              return <div><div className='gold-badge' id={i}>{category[0]}</div><br/></div>
+            }
+            if(category[1] >= 5) {
+              return <div><div className='bronze-badge' id={i}>{category[0]}</div><br/></div>
+            }
+            if(category[1] > 0 ) {
+              return <div><div className='silver-badge' id={i}>{category[0]}</div><br/></div>
+            }
+          })
+        }
+      </div>
     </div>
     
   )
