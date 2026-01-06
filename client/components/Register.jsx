@@ -10,24 +10,27 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post('/auth/register', { username, password });
-      if (response.status === 201) {
-        const userData = {
-          id: response.data.user_id,
-          username: response.data.user_name
-        };
-        login(userData);
+    // TODO: why does it even try to send without checking that username and password exist?
+    // yeah the server checks for that, as it should, but why send a request that is so obviously going to fail?
+    axios.post('/auth/register', { username, password })
+      .then((response) => {
+        if (response.status === 201) {
+          const userData = {
+            id: response.data.user_id,
+            username: response.data.user_name
+          };
+          login(userData);
 
-        // Registration successful, you can redirect to the login page or another route
-        navigate({ pathname: '/home' });
-      }
-    } catch (error) {
-      console.error(error);
-    }
+          // Registration successful, you can redirect to the login page or another route
+          navigate({ pathname: '/home' });
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to register:', error);
+      })
   };
 
   return (
