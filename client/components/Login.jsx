@@ -10,23 +10,26 @@ const Login = () => {
   
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    
-    try {
-      const response = await axios.post('/auth/login', { username, password });
-      if (response.data.message === 'Login successful.') {
+
+    // TODO: handle incorrect logins in some way. At least *tell* the user
+    axios.post('/auth/login', { username, password })
+      then((response) => {
+        // TODO: is response guaranteed to have data?
+        if (response.data.message === 'Login successful.') {
           const userData = {
-          id: response.data.user_id,
-          username: response.data.user_name
-        };
-      console.log(userData);
-      login(userData);
-      navigate({ pathname: '/home' })
-      }
-    } catch (error) {
-      console.error(error);
-    }
+            id: response.data.user_id,
+            username: response.data.user_name
+          };
+          console.log(userData);
+          login(userData);
+          navigate({ pathname: '/home' })
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to log in:', error);
+      })
   };
 
   return (
