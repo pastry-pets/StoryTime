@@ -60,7 +60,15 @@ const Text = orm.define('texts', {
   timestamps: false
 });
 
-
+// dummy table
+const FullStories = orm.define('fullStories', {
+  text: Sequelize.STRING
+});
+// will actualy use a table like this
+const UsersBookshelf = orm.define('usersBookshelf', {
+  storiesId: Sequelize.INTEGER,
+  userId: Sequelize.INTEGER
+})
 
 User.hasMany(Text);
 Text.belongsTo(User);
@@ -68,16 +76,24 @@ Prompt.hasMany(Text);
 Text.belongsTo(Prompt);
 Badges.hasMany(Prompt);
 Prompt.belongsTo(Badges);
-
+// Linking the tables together
+UsersBookshelf.hasMany(FullStories);
+UsersBookshelf.hasMany(User);
 
 
 User.sync()
 Prompt.sync()
 Text.sync()
 Badges.sync()
+// added syncs
+FullStories.sync()
+UsersBookshelf.sync()
 
 
 exports.User = User;
 exports.Prompt = Prompt;
 exports.Text = Text;
 exports.Badges = Badges;
+// exports
+exports.FullStories = FullStories;
+exports.UsersBookshelf = UsersBookshelf;
