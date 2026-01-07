@@ -1,10 +1,13 @@
-const express = require('express');
 const path = require('path');
+const { createServer } = require('http');
+const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
+const { Server } = require('socket.io');
 const { User } = require('./database/index')
+
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -73,14 +76,21 @@ const { app: routesApp } = require('./routes/routes');
 app.use('/', routesApp); // Mount routes
 
 app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, '../dist/index.html'), function(err) {
-      if (err) {
-        res.status(500).send(err)
-      }
-    })
+  res.sendFile(path.join(__dirname, '../dist/index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
   })
+})
+
+const server = createServer(app);
+const io = new Server(server); // do I want to try connectionStateRecovery?
+
+io.on('connection', (socket) => {
+  console.log('user connected');
+});
 
 // Start the server
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port http://127.0.0.1:${port}`);
 });

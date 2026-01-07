@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { AuthProvider } from './AuthContext.jsx';
+import { SocketProvider } from './SocketContext.jsx';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Homepage from './Homepage.jsx';
 import Login from './Login.jsx'
@@ -27,18 +28,20 @@ function App () {
   // adding a route to the bookshelf component
   return (
     <AuthProvider>
-      <div className='wrapper'>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Login/>} />
-            <Route path="/register" element={<Register/>} />
-            <Route path="/home" element={<Homepage/>} />
-            <Route exact path="/user" element={<User/>} />
-            <Route path="/text/id" element={<Post/>} />
-            <Route path="/user/bookshelf" element={<Bookshelf />} />
-          </Routes>
-        </Router>
-      </div>
+      <SocketProvider>
+        <div className='wrapper'>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Login/>} />
+              <Route path="/register" element={<Register/>} />
+              <Route path="/home" element={<Homepage/>} />
+              <Route exact path="/user" element={<User/>} />
+              <Route path="/text/id" element={<Post/>} />
+              <Route path="/user/bookshelf" element={<Bookshelf />} />
+            </Routes>
+          </Router>
+        </div>
+      </SocketProvider>
     </AuthProvider>
     )
 };
