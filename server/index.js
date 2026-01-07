@@ -5,8 +5,8 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const { Server } = require('socket.io');
 const { User } = require('./database/index')
+const { setUpSockets } = require('./socket.js');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -84,11 +84,7 @@ app.get('/*', function(req, res) {
 })
 
 const server = createServer(app);
-const io = new Server(server); // do I want to try connectionStateRecovery?
-
-io.on('connection', (socket) => {
-  console.log('user connected');
-});
+setUpSockets(server);
 
 // Start the server
 server.listen(port, () => {
