@@ -32,6 +32,6 @@ app.use('/text', textRoutes);
 app.use('/user', userRoutes);
 app.use('/prompt', promptRoutes);
 app.use('/badges', badgesRoutes);
-app.use('/user/bookshelf', saveStoriesRoutes);
+app.use('/bookshelf', saveStoriesRoutes);
 
 module.exports.app = app;

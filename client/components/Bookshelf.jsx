@@ -8,7 +8,7 @@ const Bookshelf = () => {
 
     // access the user state with data from context
     const { user, login, logout } = useAuth(); // this holds the object with the current logged in user
-    console.log(useAuth());
+    // console.log(useAuth());
     const [userId, setUserId] = useState(user.id);
     const [userTexts, setUserTexts] = useState([]);
     const [userBadgesSt, setUserBadgesSt] = useState('');
@@ -33,14 +33,14 @@ const Bookshelf = () => {
     };
 
     // test
-    const test = (userId) => {
-      axios.get('/user/bookshelf', userId)
+    const test = () => {
+      axios.get('/bookshelf', {userId})
       .catch((err) => {
-        console.log(err)
-      })
-    }
+        console.error(err)
+      });
+    };
 
-    
+    test()
     // leave - this splits the badges and makes them presentable
     const manipulateBadgeData = () => {
       userBadgesSt.split('+').forEach((badge) => {
