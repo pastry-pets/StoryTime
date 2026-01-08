@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { FullStories, UsersBookshelf } = require('../database/index');
+const { FullStories, UsersBookshelves} = require('../database/index');
 
 // // GET to get all the saved stories with the users id
 router.get('/', (req, res) => {
   // needs to get all stories that the current user logged in has saved
-  FullStories.findAll({userId: userId}
+  UsersBookshelves.findAll({userId: req.body}
     .then((res) => {
       res.status(200).send(res); // change
     })

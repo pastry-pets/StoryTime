@@ -33,14 +33,14 @@ const Bookshelf = () => {
     };
 
     // test
-    const test = () => {
-      axios.get('/user/bookshelf')
+    const test = (userId) => {
+      axios.get('/user/bookshelf', userId)
       .catch((err) => {
         console.log(err)
       })
     }
 
-    test()
+    
     // leave - this splits the badges and makes them presentable
     const manipulateBadgeData = () => {
       userBadgesSt.split('+').forEach((badge) => {
