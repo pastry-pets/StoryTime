@@ -8,7 +8,9 @@ import User from './User.jsx';
 import Post from './Post.jsx';
 import Register from './Register.jsx';
 import Bookshelf from './Bookshelf.jsx';
+import { io } from 'socket.io-client';
 
+const socket = io();
 
 function App () {
 
@@ -28,7 +30,7 @@ function App () {
   // adding a route to the bookshelf component
   return (
     <AuthProvider>
-      <SocketProvider>
+      <SocketProvider socket={socket}>
         <div className='wrapper'>
           <Router>
             <Routes>
