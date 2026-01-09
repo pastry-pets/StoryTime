@@ -17,7 +17,8 @@ export const SocketProvider = ({children, socket}) => {
       setProviderValue(prevState => {
         return {
           ...prevState,
-          prompt: data.words
+          prompt: data.words,
+          responses: {}
         }
       });
     });
@@ -34,15 +35,14 @@ export const SocketProvider = ({children, socket}) => {
     });
 
     socket.on('new post', (responseId, responseObject) => {
-      console.log(`received message from user ${responseObject.userId} that says ${responseObject.text}`);
-      const updatedResponseMap = {
-        ...providerValue.responses,
-        [responseId]: responseObject
-      }
+      console.log(`received message from ${responseObject.username} that says ${responseObject.text}`);
       setProviderValue(prevState => {
         return {
           ...prevState,
-          responses: updatedResponseMap
+          responses: {
+            ...prevState.responses,
+            [responseId]: responseObject
+          }
         }
       })
     });

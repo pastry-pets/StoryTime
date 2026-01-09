@@ -19,7 +19,7 @@ function Homepage() {
   
   // access the user state with data from context
   const { user, logout } = useAuth();
-  const { prompt: words, responses, endTime, socket } = useSocket();
+  const { prompt: words, responses: posts, endTime, socket } = useSocket();
   
   // // Check if the user is authenticated before rendering content
   // if (!user) {
@@ -33,12 +33,12 @@ function Homepage() {
   // const [words, setWords] = useState([])
 
   //contenders for next part of the story
-  const [posts, setPosts] = useState([])
-  const [userId, setUserId] = useState(user.id);
+  // const [posts, setPosts] = useState([])
+  // const [userId, setUserId] = useState(user.id);
   const [textCount, setTextCount] = useState(0)
-  const [lastUpdate, setLastUpdate] = useState('')
-  const [currentPrompt, setCurrentPrompt] = useState({})
-  const [currentBadge, setBadge] = useState({})
+  // const [lastUpdate, setLastUpdate] = useState('')
+  // const [currentPrompt, setCurrentPrompt] = useState({})
+  // const [currentBadge, setBadge] = useState({})
 
 
   //set the starting time for the timer
@@ -51,7 +51,7 @@ function Homepage() {
 
 
   //calculate the remaining time based on the target time and current time
-  const [remainingTime, setRemainingTime] = useState(initialTargetTime - Date.now());
+  // const [remainingTime, setRemainingTime] = useState(initialTargetTime - Date.now());
 
   //useEffect to fetch data from database upon mounting
   let latestPrompt;
@@ -187,38 +187,38 @@ function Homepage() {
 
   // }, [])
 
-  useEffect(() => {
-    const appInterval = setInterval(() => {
-      console.log('Action triggered');
+  // useEffect(() => {
+  //   const appInterval = setInterval(() => {
+  //     console.log('Action triggered');
 
-      //update target time for next action
-      const newTargetTime = Date.now() + actionInterval;
-      localStorage.setItem('targetTime', newTargetTime.toString());
+  //     //update target time for next action
+  //     const newTargetTime = Date.now() + actionInterval;
+  //     localStorage.setItem('targetTime', newTargetTime.toString());
 
-      //calculate the remaining time 
-      setRemainingTime(newTargetTime - Date.now());
-    }, actionInterval);
+  //     //calculate the remaining time 
+  //     setRemainingTime(newTargetTime - Date.now());
+  //   }, actionInterval);
 
 
-    const timer = setInterval(() => {
-      setRemainingTime(prevRemainingTime => {
-        if (prevRemainingTime <= 0) {
-          return actionInterval;
-        }
-        return prevRemainingTime - 1000;
-      });
-    }, 1000);
+  //   const timer = setInterval(() => {
+  //     setRemainingTime(prevRemainingTime => {
+  //       if (prevRemainingTime <= 0) {
+  //         return actionInterval;
+  //       }
+  //       return prevRemainingTime - 1000;
+  //     });
+  //   }, 1000);
 
-    //cleanup
-    return () => {
-      clearInterval(actionInterval);
-      clearInterval(timer);
-    };
-  }, [actionInterval]);
+  //   //cleanup
+  //   return () => {
+  //     clearInterval(actionInterval);
+  //     clearInterval(timer);
+  //   };
+  // }, [actionInterval]);
 
   // Calculate minutes and seconds from the remaining time
-  const minutes = Math.floor(remainingTime / 60000);
-  const seconds = Math.floor((remainingTime % 60000) / 1000);
+  // const minutes = Math.floor(remainingTime / 60000);
+  // const seconds = Math.floor((remainingTime % 60000) / 1000);
 
   //function to handle input change
   const handleInput = (event) => {
@@ -230,7 +230,7 @@ function Homepage() {
   const handleSubmit = () => {
     console.log('submit');
     if (input !== '') {
-      socket.emit('new text', input, userId); // do I need to send the current prompt (in case of race conditions?)
+      socket.emit('new text', input, user.id, user.username); // do I need to send the current prompt (in case of race conditions?)
       // or can I safely assume that it goes with the server's current prompt?
       setInput('');
       setTextCount(0);
@@ -267,7 +267,7 @@ function Homepage() {
               } }>Logout</button>
           </div>
           <div>
-            <Timer minutes={minutes} seconds={seconds} />
+            {/*<Timer minutes={minutes} seconds={seconds} />*/}
           </div>
         </div>
       </nav>
@@ -305,9 +305,15 @@ function Homepage() {
         </div>
         <div>
           {
-            posts.map((post) => {
-              return <Post key={post.id} text={post}/>
+            Object.keys(posts).map((postId) => {
+              console.log(postId);
+              console.log(posts[postId]);
+              return <Post key={postId} text={posts[postId]}/>
             })
+          }
+          {// posts.map((post) => {
+          //   return <Post key={post.id} text={post}/>
+          // })
           }
         </div>
       </div>

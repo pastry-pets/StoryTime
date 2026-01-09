@@ -7,7 +7,6 @@ const Post = ({text}) => {
   //console.log(username)
     // access the user state with data from context
   const { user, logout } = useAuth();
-  console.log(user.username)
 
   //const [username, setUsername] = useState('');
   const [newTimeStamp, setNewTimeStamp] = useState('')
@@ -45,7 +44,7 @@ const Post = ({text}) => {
       <div className="upvote-container">
        </div>
         <div className='text-context'>
-      <p> <strong>{user.username}: </strong>{text.text} </p>
+      <p> <strong>{text.username}: </strong>{text.text} </p>
       <UpVote text={text}/>
       <p className='timeStamp'>{newTimeStamp}</p>
     </div>

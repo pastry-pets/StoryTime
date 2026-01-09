@@ -58,7 +58,7 @@ let roundEndTimer = null;
 let stopAfterNext = false;
 let roundData = {
   words: [],
-  responses: []
+  responses: {}
 }
 let responseIdCounter = 1; // TODO: replace with id when adding response to DB!!
 
@@ -82,7 +82,7 @@ function endRound() {
 
   // clear roundData
   roundData.words = [];
-  roundData.responses = [];
+  roundData.responses = {};
 
   io.emit('round end', {}); // TODO: send winner info?
   if (!stopAfterNext) {
@@ -92,13 +92,14 @@ function endRound() {
   }
 }
 
-function handleNewText(text, userId) {
+function handleNewText(text, userId, username) {
   console.log(`User ${userId} posted ${text}`);
   // TODO: integrate with database!!
 
   const responseObject = {
     text,
     userId,
+    username: username, // TODO: possibly need to get username out of database instead of trusting client (and/or use auth somehow); this is fine for now though
     votes: 0
   };
   roundData.responses[responseIdCounter] = responseObject;
