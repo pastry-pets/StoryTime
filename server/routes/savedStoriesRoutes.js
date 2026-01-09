@@ -20,13 +20,13 @@ router.get('/:userId', (req, res) => {
 // router.post('/bookshelf', (req, res) => {
 router.post('/:userId', (req, res) => {
   console.log(req.params, req.body, 'testtststts')
-  // UsersBookshelves.create({storyId: promptId, userId: req.params.userId})
-  //   .then(() => {
-  //     res.status(201).send()
-  //   })
-  //   .catch((err) => {
-  //     console.error(err, 'POST in savedStories')
-  //   })
+  UsersBookshelves.create({storyId: req.body.textId, userId: parseInt(req.params.userId)})
+    .then(() => {
+      res.status(201).send()
+    })
+    .catch((err) => {
+      console.error(err, 'POST in savedStories')
+    })
 });
 
 // })
