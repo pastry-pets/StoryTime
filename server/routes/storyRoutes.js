@@ -10,15 +10,23 @@ const findFullStory = (storyObj) => {
 };
 
 router.get('/all', (req, res) => {
-  
+  Story.findAll({})
+    .then(stories => {
+      const allStories = stories.map(story => findFullStory(story));
+      res.status(200).send(allStories);
+    })
+    .catch(err => {
+      console.error('Unable to retrieve all stories on server: ', err);
+      res.sendStatus(500);
+    });
 });
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
   Story.findOne({ where: { id }})
-    .then(storyObj => {
-      if (storyObj) {
-        const fullStory = findFullStory(storyObj);
+    .then(story => {
+      if (story) {
+        const fullStory = findFullStory(story);
         res.status(200).send(fullStory);
       } else {
         res.sendStatus(404);
