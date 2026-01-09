@@ -48,7 +48,7 @@ const Post = ({textId, text}) => {
         console.error(err, 'error in post request for saveButton');
       })
   }
-saveButton()
+
   return (
     <div className="text-container">
       <div className="upvote-container">
@@ -57,7 +57,7 @@ saveButton()
       <p> <strong>{user.username}: </strong>{text.text} </p>
       <UpVote text={text}/>
       <p className='timeStamp'>{newTimeStamp}</p>
-      <button className='save-btn'>Save</button>
+      <button className='save-btn' onClick={saveButton}>Save</button>
     </div>
     </div>
   )

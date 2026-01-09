@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { FullStories, UsersBookshelves} = require('../database/index');
+const {  UsersBookshelves} = require('../database/index');
 
 // // GET to get all the saved stories with the users id
 router.get('/:userId', (req, res) => {
   // needs to get all stories that the current user logged in has saved
   console.log(req.params, 'EHL;L;LPOFJOSHNKJBHSJB')
-  UsersBookshelves.findAll({where: {userId: req.params.userId}})
-    .then((data) => {
-      res.status(200).send(data); // change
+  UsersBookshelves.findAll({where: {userId: parseInt(req.params.userId)}})
+    .then((savedText) => {
+      //console.log(data)
+      res.status(200).send(savedText); // change
     })
     .catch((err) => {
       console.error(err, 'savedStoriesRoutes GET');
@@ -43,4 +44,16 @@ router.post('/:userId', (req, res) => {
 
 // })
 
+
+// dummy POST for when user clicks the submit button
+// router.post('/', (req, res) => {
+//   console.log(req.body, "BOPDYYYYYYYYYYYYYYYY")
+//   FullStories.find({})
+//     .then(() => {
+//       res.status(201).send()
+//     })
+//     .catch((err) => {
+//       console.error(err, 'POST in savedStories')
+//     })
+// })
 module.exports = router;
