@@ -20,6 +20,10 @@ const User = orm.define('users', {
 
 const Prompt = orm.define('prompts', {
   matchWords: Sequelize.STRING,//grabbed with external api
+  parentID: { // <- Christian added this
+    type: Sequelize.INTEGER,
+    allowNull: true,
+  },
 }, {
   timestamps: true
 });
@@ -60,6 +64,15 @@ const Text = orm.define('texts', {
   timestamps: false
 });
 
+const Story = orm.define('stories', {
+  hasEnded: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  }
+}, {
+  timestamps: true,
+});
+
 
 
 User.hasMany(Text);
@@ -68,6 +81,7 @@ Prompt.hasMany(Text);
 Text.belongsTo(Prompt);
 Badges.hasMany(Prompt);
 Prompt.belongsTo(Badges);
+Story.hasOne(Prompt, { foreignKey: 'lastPrompt' })
 
 
 
@@ -75,9 +89,11 @@ User.sync()
 Prompt.sync()
 Text.sync()
 Badges.sync()
+Story.sync();
 
 
 exports.User = User;
 exports.Prompt = Prompt;
 exports.Text = Text;
 exports.Badges = Badges;
+exports.Story = Story;
