@@ -3,48 +3,32 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const SocketContext = createContext();
 
 export const SocketProvider = ({children, socket}) => {
-  const [providerValue, setProviderValue] = useState({
-    prompt: [],
-    story: [],
-    responses: {},
-    endTime: 0,
-    socket
-  });
+  const [prompt, setPrompt] = useState([]);
+  const [story, setStory] = useState([]);
+  const [responses, setResponses] = useState({});
+  const [endTime, setEndTime] = useState(0);
 
   useEffect(() => {
     socket.on('new prompt', (data) => {
       console.log(data);
-      setProviderValue(prevState => {
-        return {
-          ...prevState,
-          prompt: data.words,
-          responses: {}
-        }
-      });
+      setPrompt(data.words);
+      setResponses({});
     });
 
     socket.on('sync prompt', (data) => {
       console.log(data);
-      setProviderValue(prevState => {
-        return {
-          ...prevState,
-          prompt: data.words,
-          responses: data.responses
-        }
-      });
+      setPrompt(data.words);
+      setResponses(data.responses);
     });
 
     socket.on('new post', (responseId, responseObject) => {
       console.log(`received message from ${responseObject.username} that says ${responseObject.text}`);
-      setProviderValue(prevState => {
+      setResponses(prevState => {
         return {
           ...prevState,
-          responses: {
-            ...prevState.responses,
-            [responseId]: responseObject
-          }
+          [responseId]: responseObject
         }
-      })
+      });
     });
 
     socket.on('round end', (data) => {
@@ -64,15 +48,18 @@ export const SocketProvider = ({children, socket}) => {
     // cleanup function... just in case
     // I'm not sure this is necessary for an empty dependency list
     return () => {
-      socket.removeAllListeners('new prompt');
-      socket.removeAllListeners('sync prompt');
-      socket.removeAllListeners('new post');
-      socket.removeAllListeners('round end');
+      socket.removeAllListeners();
     };
   }, []);
 
   return (
-    <SocketContext.Provider value={providerValue}>
+    <SocketContext.Provider value={{
+      prompt,
+      story,
+      responses,
+      endTime,
+      socket
+    }}>
       {children}
     </SocketContext.Provider>
   );
