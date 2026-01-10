@@ -19,18 +19,19 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
  
-  font-size: 35px;
-  background: #E2CB76;
-  background: -moz-radial-gradient(center, #E2CB76 0%, #D4DB8A 46%, #96A2D5 100%);
-  background: -webkit-radial-gradient(center, #E2CB76 0%, #D4DB8A 46%, #96A2D5 100%);
-  background: radial-gradient(ellipse at center, #E2CB76 0%, #D4DB8A 46%, #96A2D5 100%);
-  padding: 20px;
+  font-size: 30px;
+  line-height: 50px;
+  background-color: #ded4bd;
+  background-size: 50px 50px;
+  background-image: repeating-linear-gradient(0deg, #5f4d2f, #5f4d2f 1.6px, #ded4bd 1.6px, #ded4bd);
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 0 10px;
   text-align: center;
   margin: 10px;
+
 }
 
 .story-container {
@@ -39,10 +40,8 @@ body, html {
   align-items: center;
   font-size: 20px;
   border-color: black;
-  background: #96A2D5;
-  background: -moz-radial-gradient(center, #96A2D5 0%, #D4DB8A 46%, #E2CB76 100%);
-  background: -webkit-radial-gradient(center, #96A2D5 0%, #D4DB8A 46%, #E2CB76 100%);
-  background: radial-gradient(ellipse at center, #96A2D5 0%, #D4DB8A 46%, #E2CB76 100%);
+  background: rgb(204, 199, 182);;
+  background: -moz-radial-gradient(center, #5a5853 0%, #e3e4dd 46%, #5a5853 0%);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px ;
