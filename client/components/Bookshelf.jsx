@@ -77,7 +77,7 @@ const Bookshelf = () => {
 
     // delete the saved story
     const deleteStory = () => {
-      axios.delete(`/bookshelf/${userId}`)
+      axios.delete(`/bookshelf/${userId}`, {textId})
         .then(() => {
           console.log('story deleted')
         })
@@ -118,7 +118,7 @@ const Bookshelf = () => {
                           {/* <strong>Created:</strong> {entry.prompt.createdAt.substring(0, 10)} */}
                         </div>
                       </div>
-                      <button onClick={deleteStory}>Delete</button>
+                      <button onClick={deleteStory(entry.id)}>Delete</button>
                     </div>
                   );
                 })}

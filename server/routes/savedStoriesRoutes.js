@@ -49,7 +49,7 @@ router.post('/:userId', (req, res) => {
 
 // DELETE a story from the bookshelf. Maybe even just delete the bookshelf as a whole
 router.delete('/:userId', (req, res) => {
-  UsersBookshelves.findOne({storyId: parseInt(req.body.textId), userId: parseInt(req.params.userId)})
+  UsersBookshelves.findOne({where: {storyId: parseInt(req.body.textId), userId: parseInt(req.params.userId)}})
     .then((story) => {
       console.log(story)
       story.destroy();
