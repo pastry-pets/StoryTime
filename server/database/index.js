@@ -61,11 +61,11 @@ const Text = orm.define('texts', {
 });
 
 // dummy table
-const FullStories = orm.define('fullStories', {
-  text: Sequelize.STRING
-}, {
-  timestamps: false
-});
+// const FullStories = orm.define('fullStories', {
+//   text: Sequelize.STRING
+// }, {
+//   timestamps: false
+// });
 // will actualy use a table like this
 const UsersBookshelves = orm.define('usersBookshelves', {
   storyId: Sequelize.INTEGER,
@@ -75,14 +75,14 @@ const UsersBookshelves = orm.define('usersBookshelves', {
 })
 
 User.hasMany(Text);
-Text.belongsTo(User);
+// Text.belongsTo(User);
 Prompt.hasMany(Text);
 Text.belongsTo(Prompt);
 Badges.hasMany(Prompt);
 Prompt.belongsTo(Badges);
 // Linking the tables together
-User.belongsToMany(FullStories, {through: UsersBookshelves, foreignKey: 'userId'});
-FullStories.belongsToMany(User, {through: UsersBookshelves, foreignKey: 'storyId'});
+User.belongsToMany(Text, {through: UsersBookshelves, foreignKey: 'userId'});
+Text.belongsToMany(User, {through: UsersBookshelves, foreignKey: 'storyId'});
 
 
 User.sync()
@@ -90,7 +90,7 @@ Prompt.sync()
 Text.sync()
 Badges.sync()
 // added syncs
-FullStories.sync()
+//FullStories.sync()
 UsersBookshelves.sync()
 
 
@@ -99,5 +99,5 @@ exports.Prompt = Prompt;
 exports.Text = Text;
 exports.Badges = Badges;
 // exports
-exports.FullStories = FullStories;
+//exports.FullStories = FullStories;
 exports.UsersBookshelves = UsersBookshelves;
