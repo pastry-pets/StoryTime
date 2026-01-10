@@ -68,7 +68,7 @@ router.put('/:id', (req, res) => {
       res.sendStatus(created ? 201 : 204);
     })
     .catch(err => {
-      console.error('Could not findOrCreate story on server: ', err);
+      console.error('Unable to update or create story on server: ', err);
     });
 });
 
