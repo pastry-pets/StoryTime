@@ -43,7 +43,7 @@ const Post = ({textId, text}) => {
   // post request for the save-btn
   const saveButton = () => {
     console.log(textId, 'HERE IS THE TEST ID')
-    axios.post('/bookshelf', {params: {userId, textId}})
+    axios.post(`/bookshelf/${userId}`, {textId})
       .catch((err) => {
         console.error(err, 'error in post request for saveButton');
       })

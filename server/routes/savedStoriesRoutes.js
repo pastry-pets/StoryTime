@@ -21,12 +21,12 @@ router.get('/:userId', (req, res) => {
 // router.post('/bookshelf', (req, res) => {
 router.post('/:userId', (req, res) => {
   console.log(req.params, req.body, 'testtststts')
-  UsersBookshelves.create({storyId: req.body.textId, userId: parseInt(req.params.userId)})
+  UsersBookshelves.create({storyId: parseInt(req.body.textId), userId: parseInt(req.params.userId)})
     .then(() => {
       res.status(201).send()
     })
     .catch((err) => {
-      console.error(err, 'POST in savedStories')
+      console.error(err, 'POST error in savedStories')
     })
 });
 
