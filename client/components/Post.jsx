@@ -33,6 +33,7 @@ const Post = ({text, postId}) => {
       minute: 'numeric',
     });
   
+    // this has no basis in reality
     setNewTimeStamp(`${formattedTime}-${formattedDate}`);
   
   }, []);

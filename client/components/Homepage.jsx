@@ -19,7 +19,7 @@ function Homepage() {
   
   // access the user state with data from context
   const { user, logout } = useAuth();
-  const { prompt: words, responses: posts, endTime, socket } = useSocket();
+  const { prompt: words, responses: posts, story, endTime, socket } = useSocket();
   
   // // Check if the user is authenticated before rendering content
   // if (!user) {
@@ -28,7 +28,7 @@ function Homepage() {
   // }
   
   //building story from post winners
-  const [story, setStory] = useState([])
+  // const [story, setStory] = useState([])
   const [input, setInput] = useState('')
   // const [words, setWords] = useState([])
 
@@ -283,8 +283,8 @@ function Homepage() {
 
       <div className='story-container'>
         {
-          story.map((submission, i) => {
-            return <div key={submission.id}>{submission.text}</div>
+          story.map((text, i) => {
+            return <div key={`${text}-${i}`}>{text}</div>
           })
         }
       </div>

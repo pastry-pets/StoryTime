@@ -60,7 +60,8 @@ let roundEndTimer = null;
 let stopAfterNext = false;
 let roundData = {
   words: [],
-  responses: {}
+  responses: {},
+  currentCanon: []
 }
 let responseIdCounter = 1; // TODO: replace with id when adding response to DB!!
 
@@ -82,16 +83,41 @@ function startRound() {
 function endRound() {
   console.log('ending a round');
 
+  const numResponses = Object.keys(roundData.responses).length;
+  console.log(`got ${numResponses} responses`);
+
+  let winningText = '';
+  if (numResponses) {
+    // find the best response to add to the canon
+
+    // transform responses obj to arr to reuse the logic from client/badgeHelpers/bestOf
+    const responsesArray = Object.keys(roundData.responses).map((key) => roundData.responses[key]);
+    const winningResponse = responsesArray.reduce((acc, current) => {
+      return current.votes > acc.votes ? current : acc; // ties are broken by which comes first in the Object.keys() array
+    });
+    winningText = winningResponse.text;
+    console.log(`The winning text was ${winningText}`);
+
+    roundData.currentCanon.push(winningText);
+  }
+
   // clear roundData
   roundData.words = [];
   roundData.responses = {};
 
-  io.emit('round end', {}); // TODO: send winner info?
-  if (!stopAfterNext) {
-    startRound();
+  io.emit('round end', winningText); // TODO: send winner info?
+
+  if (stopAfterNext || (numResponses === 0)) {
+    endStory();
   } else {
-    roundEndTimer = null; // clear timer to make it clear no rounds are in progress
+    startRound();
   }
+
+  // if (!stopAfterNext) {
+  //   startRound();
+  // } else {
+  //   roundEndTimer = null; // clear timer to make it clear no rounds are in progress
+  // }
 }
 
 function handleNewText(text, userId, username) {
@@ -126,6 +152,27 @@ function syncJustJoined(socket) {
   startPromptCycle();
 }
 
+// function startStory() {
+//   console.log('starting story')
+
+// }
+
+function endStory() {
+  console.log('ending story');
+  console.log('Final canon:');
+  console.log(roundData.currentCanon);
+
+  // award logic here
+
+  roundData.currentCanon = [];
+
+  io.emit('story end');
+
+  if (!stopAfterNext) {
+    startRound();
+  }
+}
+
 function startPromptCycle() {
   console.log('starting a cycle');
   stopAfterNext = false;
@@ -135,7 +182,7 @@ function startPromptCycle() {
 }
 
 function stopPromptCycle() {
-  console.log('ending a cycle');
+  console.log('cycle will end');
   stopAfterNext = true;
 }
 

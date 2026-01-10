@@ -19,6 +19,7 @@ export const SocketProvider = ({children, socket}) => {
       console.log(data);
       setPrompt(data.words);
       setResponses(data.responses);
+      setStory(data.currentCanon);
     });
 
     socket.on('new post', (responseId, responseObject) => {
@@ -43,19 +44,13 @@ export const SocketProvider = ({children, socket}) => {
       });
     });
 
-    socket.on('round end', (data) => {
-      // clear round-specific state data
-      // rethinking this - it's causing a flicker
-      // setProviderValue(prevState => {
-      //   return {
-      //     ...providerValue,
-      //     prompt: [],
-      //     story: [],
-      //     responses: {},
-      //     endTime: 0,
-      //   }
-      // });
+    socket.on('round end', (winningText) => {
+      setStory(prevState => prevState.concat(winningText));
     });
+
+    socket.on('story end', () => {
+      setStory([]);
+    })
 
     // cleanup function... just in case
     // I'm not sure this is necessary for an empty dependency list
