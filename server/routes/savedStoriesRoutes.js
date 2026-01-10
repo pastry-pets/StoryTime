@@ -30,7 +30,6 @@ router.get('/:userId', (req, res) => {
 // // POST user can make a bookshelf
 // router.post('/bookshelf', (req, res) => {
 router.post('/:userId', (req, res) => {
-  console.log(req.params, req.body, 'testtststts')
   UsersBookshelves.create({storyId: parseInt(req.body.textId), userId: parseInt(req.params.userId)})
     .then(() => {
       res.status(201).send()
@@ -51,14 +50,15 @@ router.post('/:userId', (req, res) => {
 
 // DELETE a story from the bookshelf. Maybe even just delete the bookshelf as a whole
 router.delete('/:userId', (req, res) => {
-  UsersBookshelves.findOne({where: {storyId: parseInt(req.body.textId), userId: parseInt(req.params.userId)}})
+  console.log(req.params, req.body, 'testtststts')
+  UsersBookshelves.destroy({where: {storyId: parseInt(req.body.textId), userId: parseInt(req.params.userId)}})
     .then((story) => {
       console.log(story)
-      story.destroy();
+
       res.status(201).send()
     })
     .catch((err) => {
-      console.error(err, 'POST error in savedStories')
+      console.error(err, 'DELETE error in savedStories')
       res.sendStatus(500);
     })
 

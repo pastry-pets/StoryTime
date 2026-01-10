@@ -33,7 +33,7 @@ const Bookshelf = () => {
     };
 
     // test
-    const test = () => {
+    const getSavedStories = () => {
       axios.get(`/bookshelf/${userId}`)
       .then((res) => {
         setUserTexts(res.data)
@@ -42,7 +42,10 @@ const Bookshelf = () => {
         console.error(err)
       });
     };
-    test()
+    // test()
+    useEffect(() => {
+      getSavedStories()
+    }, [])
     // leave - this splits the badges and makes them presentable
     const manipulateBadgeData = () => {
       userBadgesSt.split('+').forEach((badge) => {
@@ -76,10 +79,12 @@ const Bookshelf = () => {
     }, [userBadgesSt])
 
     // delete the saved story
-    const deleteStory = () => {
-      axios.delete(`/bookshelf/${userId}`, {textId})
+    const deleteStory = (textId) => {
+      console.log(textId)
+      axios.delete(`/bookshelf/${userId}`, {data: {textId}})
         .then(() => {
-          console.log('story deleted')
+          console.log('story deleted');
+          getSavedStories();
         })
         .catch((err) => {
           console.error(err, 'Cannot delete story');
@@ -118,7 +123,7 @@ const Bookshelf = () => {
                           {/* <strong>Created:</strong> {entry.prompt.createdAt.substring(0, 10)} */}
                         </div>
                       </div>
-                      <button onClick={deleteStory(entry.id)}>Delete</button>
+                      <button onClick={() => deleteStory(entry.id)}>Delete</button>
                     </div>
                   );
                 })}
