@@ -36,7 +36,7 @@ const Bookshelf = () => {
     const test = () => {
       axios.get(`/bookshelf/${userId}`)
       .then((res) => {
-        console.log(res.data)
+        setUserTexts(res.data)
       })
       .catch((err) => {
         console.error(err)

@@ -9,6 +9,7 @@ router.get('/:userId', (req, res) => {
   UsersBookshelves.findAll({where: {userId: parseInt(req.params.userId)}})
     .then((savedText) => {
       //console.log(data)
+      
       res.status(200).send(savedText); // change
     })
     .catch((err) => {
