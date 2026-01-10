@@ -5,6 +5,7 @@ const userRoutes = require('./userRoutes');
 const auth = require('./auth');
 const badgesRoutes = require('./badgesRoutes');
 const storyRoutes = require('./storyRoutes')
+const saveStoriesRoutes = require('./savedStoriesRoutes.js');
 
 const app = express();
 
@@ -34,5 +35,6 @@ app.use('/user', userRoutes);
 app.use('/prompt', promptRoutes);
 app.use('/badges', badgesRoutes);
 app.use('/stories', storyRoutes);
+app.use('/bookshelf', saveStoriesRoutes);
 
 module.exports.app = app;
