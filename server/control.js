@@ -82,7 +82,7 @@ async function startRound() {
   promptId = PromptEntry.id;
   roundData.words = words;
 
-  const endsAt = new Date() + roundDuration;
+  const endsAt = (new Date()).getTime() + roundDuration;
   roundData.endsAt = endsAt;
   roundEndTimer = setTimeout(endRound, roundDuration);
   io.emit('new prompt', {
