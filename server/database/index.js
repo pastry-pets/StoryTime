@@ -21,6 +21,10 @@ const User = orm.define('users', {
 
 const Prompt = orm.define('prompts', {
   matchWords: Sequelize.STRING,//grabbed with external api
+  parentID: { // <- Christian added this
+    type: Sequelize.INTEGER,
+    allowNull: true,
+  },
 }, {
   timestamps: true
 });
@@ -61,6 +65,16 @@ const Text = orm.define('texts', {
   timestamps: false
 });
 
+const Story = orm.define('stories', {
+  hasEnded: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  }
+}, {
+  timestamps: true,
+});
+
+
 // dummy table
 // const FullStories = orm.define('fullStories', {
 //   text: Sequelize.STRING
@@ -81,6 +95,8 @@ Prompt.hasMany(Text);
 Text.belongsTo(Prompt);
 Badges.hasMany(Prompt);
 Prompt.belongsTo(Badges);
+Story.hasOne(Prompt, { foreignKey: 'lastPrompt' })
+
 // Linking the tables together
 User.belongsToMany(Text, {through: UsersBookshelves, foreignKey: 'userId'});
 Text.belongsToMany(User, {through: UsersBookshelves, foreignKey: 'storyId'});
@@ -90,6 +106,7 @@ User.sync()
 Prompt.sync()
 Text.sync()
 Badges.sync()
+Story.sync();
 // added syncs
 //FullStories.sync()
 UsersBookshelves.sync()
@@ -99,6 +116,7 @@ exports.User = User;
 exports.Prompt = Prompt;
 exports.Text = Text;
 exports.Badges = Badges;
+exports.Story = Story;
 // exports
 //exports.FullStories = FullStories;
 exports.UsersBookshelves = UsersBookshelves;
