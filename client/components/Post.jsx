@@ -4,25 +4,11 @@ import axios from 'axios';
 import { useAuth } from './AuthContext.jsx';
 
 const Post = ({text, postId}) => {
-  //console.log(username)
-    // access the user state with data from context
-    console.log(postId, 'this is a key')
+  // access the user state with data from context
   const { user, logout } = useAuth();
-  console.log(user.username)
 
-  //const [username, setUsername] = useState('');
   const [newTimeStamp, setNewTimeStamp] = useState('')
   useEffect(() => {
-    // axios.get(`/text/user/${user.id}/${user.username}`)
-    // .then((res) => {
-    //   setUsername(res.data.user.username)
-    // })
-    // .catch((err) => {
-    //   console.error("err", err);
-
-    // })
-
-
     const timeStamp = new Date();
     const formattedDate = timeStamp.toLocaleString('en-US', {
       year: 'numeric',
@@ -42,7 +28,6 @@ const Post = ({text, postId}) => {
 
   // post request for the save-btn
   const saveButton = () => {
-    console.log(postId, 'HERE IS THE TEST ID')
     axios.post(`/bookshelf/${user.id}`, {textId: postId})
       .catch((err) => {
         console.error(err, 'error in post request for saveButton');
