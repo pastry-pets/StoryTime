@@ -6,7 +6,7 @@ const orm = new Sequelize('stories', 'root', '', {
 });
 
 orm.authenticate().then(() => {
-  console.log('Connection has been established successfully.');
+  console.info('Connection has been established successfully.');
 }).catch((error) => {
   console.error('Unable to connect to the database: ', error);
 });
