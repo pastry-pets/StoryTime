@@ -107,7 +107,7 @@ The random words API does not require an API key, so (as of now) there is no sen
 
 ### Architecture
 
-See [websocket and architecture Readme](README-architecture.md).
+See [websocket and architecture README](README-architecture.md).
 
 ### BUGS
 
